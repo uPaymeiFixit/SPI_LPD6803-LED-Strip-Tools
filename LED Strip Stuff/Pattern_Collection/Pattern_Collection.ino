@@ -35,11 +35,11 @@ void loop()
 {
   //rainbowLoop();
   //rainbow();
-  //chase();
+  chase();
   //testFade();
   //jonsPattern();
   //setLEDs(255,0,0);
-  strobe(4);
+  //strobe(4);
 }
 
 ////////////////////////////// PATTERNS //////////////////////////////
@@ -218,7 +218,7 @@ void chase() {
       }
     }
     FastSPI_LED.show();
-    delay(50);
+    delay(3000);
   }
 }
 

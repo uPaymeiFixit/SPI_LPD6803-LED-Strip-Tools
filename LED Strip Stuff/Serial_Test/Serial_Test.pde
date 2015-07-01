@@ -1,103 +1,70 @@
-////////////////////////////// SETUP AND CONST //////////////////////////////
+/***
+    bitlash-demo.pde
 
-// SETUP: 
-//    PIN GND -> GND
-//    PIN 13  -> CLK
-//    PIN 11  -> DAT
+    Bitlash is a tiny language interpreter that provides a serial port shell environment
+    for bit banging and hardware hacking.
 
+    This is an example demonstrating how to use the Bitlash2 library for Arduino 0015.
+
+    Bitlash lives at: http://bitlash.net
+    The author can be reached at: bill@bitlash.net
+
+    Copyright (C) 2008-2012 Bill Roy
+
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of this software and associated documentation
+    files (the "Software"), to deal in the Software without
+    restriction, including without limitation the rights to use,
+    copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following
+    conditions:
+    
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.
+***/
+
+// This is the simplest bitlash integration.
+
+#include "bitlash.h"
 #include <FastSPI_LED.h>
+
 #define NUM_LEDS 17
-//#define PIN 4
+#define PIN 4
 #define PI 3.14159
 
 struct CRGB { unsigned char g; unsigned char r; unsigned char b; };
 struct CRGB *leds;
 
-void setup()
-{
+void setup(void) {
+
+    // initialize bitlash and set primary serial port baud
+    // print startup banner and run the startup macro
+    initBitlash(57600);
+
   FastSPI_LED.setLeds(NUM_LEDS);
   FastSPI_LED.setChipset(CFastSPI_LED::SPI_LPD6803);
 
-//  FastSPI_LED.setPin(PIN);
+  FastSPI_LED.setPin(PIN);
   
   FastSPI_LED.init();
   FastSPI_LED.start();
 
   leds = (struct CRGB*)FastSPI_LED.getRGBData(); 
-
-  Serial.begin(9600);
 }
 
-////////////////////////////// END SETUP AND CONST //////////////////////////////
-
-
-void loop()
-{
-
+void loop(void) {
+    runBitlash();
 }
-
-////////////////////////////// PATTERNS //////////////////////////////
-
-// Lets you serially set an on and off delay time for the @index led
-// example input "0005, 0100" for 5ms on 100ms off
-int incomingByte;
-int onTime=10, offTime=10;
-void setFrequency(int index)
-{
-    if (Serial.available() == 9)
-    {
-        onTime = Serial.read()*1000;
-        onTime += Serial.read()*100;
-        onTime += Serial.read()*10;
-        onTime += Serial.read();
-        onTime -= 53328;
-        onTime /= 10;
-        Serial.read();
-        offTime = Serial.read()*1000;
-        offTime += Serial.read()*100;
-        offTime += Serial.read()*10;
-        offTime += Serial.read();
-        offTime -= 53328;
-        offTime /= 10;
-        Serial.print(onTime); Serial.println(offTime);
-    }
-    setLED(index,255,255,255);
-    FastSPI_LED.show();
-    delay(onTime);
-
-    clearLEDs();
-    FastSPI_LED.show();
-    delay(offTime);
-
-}
-
-// Receives via serial the index of an LED to turn on
-void manual()
-{
-  delay(16); // Lets the serial buffer catch up
-  
-  if (Serial.available() == 1)
-  {
-    clearLEDs();
-    incomingByte = Serial.read()*10;
-    incomingByte += Serial.read() - 528; // char '0'*10+'0' is 528
-    setLED(incomingByte, 255,255,255);
-    FastSPI_LED.show(); // Turns LEDs on
-    Serial.println(incomingByte);
-
-  }
-  else if (Serial.available() == 1)
-  {
-    clearLEDs();
-    incomingByte = Serial.read()-48; // char '0' is 48
-    setLED(incomingByte, 255,255,255);
-    FastSPI_LED.show(); // Turns LEDs on
-    Serial.println(incomingByte);
-  }
-}
-
-
-
 
 ////////////////////////////// TOOLS //////////////////////////////
 
