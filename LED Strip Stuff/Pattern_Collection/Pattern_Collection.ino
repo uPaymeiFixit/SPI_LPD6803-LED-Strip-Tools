@@ -40,6 +40,7 @@ void loop()
   //testFade();
   //jonsPattern();
   //setLEDs(255,0,0);
+  //strobe(4);
 }
 
 ////////////////////////////// PATTERNS //////////////////////////////
@@ -107,6 +108,17 @@ void manual()
     FastSPI_LED.show(); // Turns LEDs on
     Serial.println(incomingByte);
   }
+}
+
+void strobe(int delay_time)
+{
+  setLEDs(255,255,255);
+  FastSPI_LED.show();
+  delay(delay_time);
+
+  clearLEDs();
+  FastSPI_LED.show();
+  delay(delay_time);
 }
 
 void jonsPattern()
@@ -214,7 +226,7 @@ void chase() {
       }
     }
     FastSPI_LED.show();
-    delay(50);
+    delay(3000);
   }
 }
 
