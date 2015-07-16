@@ -36,7 +36,7 @@ void loop()
   //soundRainbowLoop()
   //faded(readSound());
   //rainbowLoop(readSound());
-  rainbowLoop(40, true);
+  rainbowLoop(40, false);
   //rainbow();
   //chase();
   //testFade();
@@ -168,7 +168,7 @@ void jonsPattern()
 }
 
 // If you lay the strip in a circle, a color wheel will rotate
-int rainbowLoop_lastStopped = 0;
+int rainbowLoop_lastStopped = 10000000;
 void rainbowLoop(int _delay, bool _clockwise)
 {
       for(int i = 0; i < NUM_LEDS; i++)
