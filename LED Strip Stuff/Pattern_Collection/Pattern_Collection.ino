@@ -165,20 +165,26 @@ void jonsPattern()
 // If you lay the strip in a circle, a color wheel will rotate
 int rainbowLoop_lastStopped = 0;
 void rainbowLoop(int _delay, bool _clockwise)
-{
-    for(int i = 0; i < NUM_LEDS; i++)
-    {
-      byte rgb[3];
-      float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS;
-      hsvToRgb(hue,1,1,rgb);
-      setLED(i, rgb[0], rgb[1], rgb[2]);
-    }
+{   if (_clockwise)
+      for(int i = 0; i < NUM_LEDS; i++)
+      {
+        byte rgb[3];
+        float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS;
+        hsvToRgb(hue,1,1,rgb);
+        setLED(i, rgb[0], rgb[1], rgb[2]);
+      }
+    else
+      for(int i = NUM_LEDS; i >= 0; i--)
+      {
+        byte rgb[3];
+        float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS;
+        hsvToRgb(hue,1,1,rgb);
+        setLED(i, rgb[0], rgb[1], rgb[2]);
+      }
     FastSPI_LED.show();
     delay(_delay);
     if (_clockwise)
       rainbowLoop_lastStopped++;
-    else
-      rainbowLoop_lastStopped--;
 }
 
 
