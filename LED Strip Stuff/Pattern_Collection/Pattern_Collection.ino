@@ -166,11 +166,8 @@ void jonsPattern()
 int rainbowLoop_lastStopped = 0;
 void rainbowLoop(int _delay, bool _clockwise)
 {
-    for(int j = 0; j < NUM_LEDS; j++)
+    for(int i = 0; i < NUM_LEDS; i++)
     {
-      int i = j;
-      if (_clockwise)
-        i = NUM_LEDS-j;
       byte rgb[3];
       float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS;
       hsvToRgb(hue,1,1,rgb);
@@ -178,7 +175,10 @@ void rainbowLoop(int _delay, bool _clockwise)
     }
     FastSPI_LED.show();
     delay(_delay);
-    rainbowLoop_lastStopped++;
+    if (_clockwise)
+      rainbowLoop_lastStopped++;
+    else
+      rainbowLoop_lastStopped--;
 }
 
 
