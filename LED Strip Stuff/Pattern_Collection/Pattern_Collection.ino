@@ -33,8 +33,8 @@ void setup()
 
 void loop()
 {
-  readSound();
-  //rainbowLoop(40);
+  faded(readSound());
+  rainbowLoop(readSound());
   //rainbow();
   //chase();
   //testFade();
@@ -45,14 +45,19 @@ void loop()
 
 ////////////////////////////// PATTERNS //////////////////////////////
 
-void readSound()
+int fades = 0;
+void faded(brightnes)
 {
-  int input = analogRead(0);
+  if (brightness > 150)
+    fades = 256;
 
-  //input = map(input, 0,1023,0,255);
-  //setLEDs(input, input, input);
+  fades--;
+  setLEDs(fades,fades,fades);
+}
 
-  rainbowLoop(map(input, 0,1023,0,255));
+int readSound()
+{
+  return map(analogRead(0), 0,1023,0,255);
 }
 
 // Lets you serially set an on and off delay time for the @index led
