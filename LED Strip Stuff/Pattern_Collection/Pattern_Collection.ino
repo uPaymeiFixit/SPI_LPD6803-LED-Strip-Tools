@@ -33,6 +33,7 @@ void setup()
 
 void loop()
 {
+  //soundRainbowLoop()
   //faded(readSound());
   //rainbowLoop(readSound());
   rainbowLoop(40, true);
@@ -48,7 +49,11 @@ void loop()
 
 void soundRainbowLoop()
 {
-  rainbowLoop(readSound(), false);
+  int level = readSound();
+  if (level > 100)
+    rainbowLoop(level, false);
+  else
+    rainbowLoop(level, true);
 }
 
 
@@ -165,26 +170,21 @@ void jonsPattern()
 // If you lay the strip in a circle, a color wheel will rotate
 int rainbowLoop_lastStopped = 0;
 void rainbowLoop(int _delay, bool _clockwise)
-{   if (_clockwise)
+{
       for(int i = 0; i < NUM_LEDS; i++)
       {
         byte rgb[3];
-        float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS;
-        hsvToRgb(hue,1,1,rgb);
-        setLED(i, rgb[0], rgb[1], rgb[2]);
-      }
-    else
-      for(int i = NUM_LEDS; i >= 0; i--)
-      {
-        byte rgb[3];
-        float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS;
+        float hue = ((i+abs(rainbowLoop_lastStopped))%NUM_LEDS+0.0)/NUM_LEDS;
         hsvToRgb(hue,1,1,rgb);
         setLED(i, rgb[0], rgb[1], rgb[2]);
       }
     FastSPI_LED.show();
     delay(_delay);
+
     if (_clockwise)
       rainbowLoop_lastStopped++;
+    else
+      rainbowLoop_lastStopped--;
 }
 
 
