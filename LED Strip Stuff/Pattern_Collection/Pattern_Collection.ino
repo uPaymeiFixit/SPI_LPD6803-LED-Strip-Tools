@@ -1,6 +1,6 @@
 ////////////////////////////// SETUP AND CONST //////////////////////////////
 
-// SETUP: 
+// SETUP:
 //    PIN GND -> GND
 //    PIN 13  -> CLK
 //    PIN 11  -> DAT
@@ -19,11 +19,11 @@ void setup()
   FastSPI_LED.setChipset(CFastSPI_LED::SPI_LPD6803);
 
   FastSPI_LED.setPin(PIN);
-  
+
   FastSPI_LED.init();
   FastSPI_LED.start();
 
-  leds = (struct CRGB*)FastSPI_LED.getRGBData(); 
+  leds = (struct CRGB*)FastSPI_LED.getRGBData();
 
   Serial.begin(9600);
 }
@@ -33,7 +33,8 @@ void setup()
 
 void loop()
 {
-  rainbowLoop();
+  readSound();
+  //rainbowLoop();
   //rainbow();
   //chase();
   //testFade();
@@ -42,6 +43,13 @@ void loop()
 }
 
 ////////////////////////////// PATTERNS //////////////////////////////
+
+readSound()
+{
+  int input = analogRead(0);
+  input = map(input, 0,1023,0,255)
+  setLEDs(input, input, input);
+}
 
 // Lets you serially set an on and off delay time for the @index led
 // example input "0005, 0100" for 5ms on 100ms off
@@ -80,7 +88,7 @@ void setFrequency(int index)
 void manual()
 {
   delay(16); // Lets the serial buffer catch up
-  
+
   if (Serial.available() == 2)
   {
     clearLEDs();
@@ -109,7 +117,7 @@ void jonsPattern()
   hsvToRgb(random(360)/360.0,1,1,rgb1);
   hsvToRgb(random(360)/360.0,1,1,rgb2);
 
-   
+
   for(int i = 0; i <= NUM_LEDS/2-1; i++)
   {
     clearLEDs();
@@ -180,7 +188,7 @@ void chase() {
     hsvToRgb(random(360)/360,1,1,rgb);
     r = rgb[0];
     g = rgb[1];
-    b = rgb[2];   
+    b = rgb[2];
   }
   else
   {
