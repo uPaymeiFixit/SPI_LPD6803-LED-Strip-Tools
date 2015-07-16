@@ -34,7 +34,7 @@ void setup()
 void loop()
 {
   readSound();
-  //rainbowLoop();
+  //rainbowLoop(40);
   //rainbow();
   //chase();
   //testFade();
@@ -45,11 +45,14 @@ void loop()
 
 ////////////////////////////// PATTERNS //////////////////////////////
 
-readSound()
+void readSound()
 {
   int input = analogRead(0);
-  input = map(input, 0,1023,0,255)
-  setLEDs(input, input, input);
+
+  //input = map(input, 0,1023,0,255);
+  //setLEDs(input, input, input);
+
+  rainbowLoop(map(input, 0,1023,0,255));
 }
 
 // Lets you serially set an on and off delay time for the @index led
@@ -148,7 +151,7 @@ void jonsPattern()
 }
 
 // If you lay the strip in a circle, a color wheel will rotate
-void rainbowLoop()
+void rainbowLoop(int _delay)
 {
   for(int j = 0; j < NUM_LEDS; j++)
   {
@@ -159,7 +162,7 @@ void rainbowLoop()
       setLED(i, rgb[0], rgb[1], rgb[2]);
     }
     FastSPI_LED.show();
-    delay(50);
+    delay(_delay);
   }
 
 }
