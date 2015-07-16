@@ -33,8 +33,9 @@ void setup()
 
 void loop()
 {
-  faded(readSound());
+  //faded(readSound());
   //rainbowLoop(readSound());
+  rainbowLoop(40);
   //rainbow();
   //chase();
   //testFade();
