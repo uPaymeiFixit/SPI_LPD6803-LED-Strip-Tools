@@ -35,7 +35,7 @@ void loop()
 {
   //faded(readSound());
   //rainbowLoop(readSound());
-  rainbowLoop(40);
+  rainbowLoop(40, true);
   //rainbow();
   //chase();
   //testFade();
@@ -166,19 +166,19 @@ void jonsPattern()
 int rainbowLoop_lastStopped = 0;
 void rainbowLoop(int _delay, bool _clockwise)
 {
-  //for(int j = 0; j < NUM_LEDS; j++)
-  //{
-    for(int i = 0; i < NUM_LEDS; i++)
+    for(int j = 0; j < NUM_LEDS; j++)
     {
+      int i = j;
+      if (_clockwise)
+        i = NUM_LEDS-j;
       byte rgb[3];
-      float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS
+      float hue = ((i+rainbowLoop_lastStopped)%NUM_LEDS+0.0)/NUM_LEDS;
       hsvToRgb(hue,1,1,rgb);
       setLED(i, rgb[0], rgb[1], rgb[2]);
     }
     FastSPI_LED.show();
     delay(_delay);
     rainbowLoop_lastStopped++;
-  //}
 }
 
 
